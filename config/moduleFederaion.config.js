@@ -1,10 +1,10 @@
 const packageJsonCommon = require('../package.json');
 
 const moduleFederationConfig = {
-    name:'products',
+    name:'cart',
     filename:'remoteEntry.js',
     exposes:{
-        './ProductsApp':'./src/bootstrap.tsx'
+        './CartApp':'./src/bootstrap.tsx'
     },
     remotes:{
         container:'container@http://localhost:2000/remoteEntry.js'

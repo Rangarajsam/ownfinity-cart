@@ -8,11 +8,11 @@ const devConfig = {
   mode: 'development',
   entry: "./src/index.ts",
   output:{
-    publicPath:'http://localhost:2001/',
+    publicPath:'http://localhost:2004/',
     assetModuleFilename: "images/[hash][ext][query]",
   },
   devServer: {
-    port: 2001,
+    port: 2004,
     historyApiFallback: true
   },
   plugins:[
