@@ -2,8 +2,6 @@ import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 import {API_URL} from "../../config/generalConfig";
 import { getAuthToken } from "../../utils/authUtils";
-import { get } from "http";
-
 export const addToCart = createAsyncThunk(
     "cart/addToCart",
     async (productId: string, {rejectWithValue, getState}) => {
