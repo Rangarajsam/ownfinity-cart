@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
-import { removeFromCart } from '../store/slices/cartSlice';
+import { removeFromCart, getCartItems } from '../store/slices/cartSlice';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { eventBus } from 'container/eventBus';
 
 const CartListPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const cart = useSelector((state: RootState) => state.cart);
-    const productToBuy = useSelector((state: RootState) => state.product.productToBuy);
-    const productsToList = productToBuy.length > 0 ? productToBuy : cart.cartItems;
+    const productToBuy = useSelector((state: RootState) => state.product?.productToBuy);
+    const productsToList = productToBuy?.length > 0 ? productToBuy : cart.cartItems;
     const [eachItemQuantity, setEachItemQuantity] = useState<{ [key: string]: number }>({});
 
     const handleRemoveItem = (id: string) => {
         dispatch(removeFromCart(id));
+        eventBus.emit('cart:updated', { count : cart.cartItems.length - 1});
     };
 
     const handleUpdateQuantity = (e: React.ChangeEvent<HTMLInputElement>, productId: string) => {
@@ -35,7 +37,11 @@ const CartListPage = () => {
         toast.success('Your order placed successfully!')
     };
 
-    if(!cart.cartItems || cart.cartItems.length === 0 && !productToBuy.length) {
+    useEffect(() => {
+        dispatch(getCartItems());   
+    }, [dispatch]);
+
+    if(!cart.cartItems || cart.cartItems.length === 0 && !productToBuy?.length) {
         return (
             <div className="flex items-center justify-center h-screen">
                 <div className="text-center">
@@ -47,7 +53,7 @@ const CartListPage = () => {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row gap-8 p-8">
+        <div className="flex flex-col lg:flex-row gap-8 px-8 pt-8 pb-[100px]">
             <div className="lg:w-2/3">
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h1 className="text-2xl font-bold text-gray-900 mb-4">Your Cart</h1>
@@ -76,7 +82,7 @@ const CartListPage = () => {
                                             onChange={(e) => handleUpdateQuantity(e, item._id)}
                                             className="w-16 border border-gray-300 rounded-lg text-center py-1"
                                         />
-                                        {!productToBuy.length && <button
+                                        {!productToBuy?.length && <button
                                             onClick={() => handleRemoveItem(item._id)}
                                             className="text-red-600 hover:underline self-end"
                                         >

@@ -110,6 +110,9 @@ const cartSlice = createSlice({
         loading: false,
         error: null as unknown | null,
         totalPrice: 0,
+        product: {
+            productToBuy: [] as any[]
+        } as any
     },
     reducers: {
     },
